@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Hosted Multi-factor Authentication</title>
+  </head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/styles.css">
+  <body>
+    <div id="cssmenu">
+      <ol>
+        <li class='active'><a href='/'>About</a></li>
+        {% if username %}
+        <li><a href="/tokens">Tokens</a></li>
+        <li class='last'><a href="{{logout_url}}">Logout</a> [{{username}}]</li>
+        {% else %}
+        <li class='last'><a href="{{login_url}}">Login</a></li>
+        {% endif %}
+      </ol>
+    </div>
+    <div id="main">
+      <p>
+      Multi-factor-authentication combines an identifier (e.g. your email address) with something you know (a password) and something you have (a token).<br>
+      Managing multiple accounts and passwords online is much safer and easier with a password manager, but managing tokens across sites is still hard.<br>
+      Why not use something similar for your tokens?<br>
+      This app allows you to securely store your tokens in a central location.<br>
+      </p>
+      Features include:<br>
+      <ol>
+        <li> Strong multi-factor authentication including hardware token support <a href="http://fidoalliance.org/about">FIDO/U2F</a> </li>
+        <li> Federated login with <a href="https://developers.google.com/+/features/sign-in">Google</a> </li>
+        <li> Token sharing </li>
+        <li> <a href="https://github.com/TODO">Open-source!</a> </li>
+      </ol>
+    </div>
+  </body>
+</html>

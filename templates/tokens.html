@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Hosted Multi-factor Authentication</title>
+  </head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/styles.css">
+  <body>
+    <div id="cssmenu">
+      <ol>
+        <li><a href='/'>About</a></li>
+        {% if username %}
+        <li class='active'><a href="/tokens">Tokens</a></li>
+        <li class='last'><a href="{{logout_url}}">Logout</a> [{{username}}]</li>
+        {% else %}
+        <li class='last'><a href="{{login_url}}">Login</a></li>
+        {% endif %}
+      </ol>
+    </div>
+
+
+
+
+    <div id="main">
+    
+    token 1
+    
+
+    </div>
+  </body>
+</html>
