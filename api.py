@@ -12,6 +12,10 @@ from flask import request
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
+from pyotp import TOTP
+from Crypto.Cipher import AES 
+from appengine_config import SECRET_KEY
+
 
 def get_mfa_user(appengine_user):
     """ Retrieves the User object from the DB """
@@ -75,12 +79,12 @@ def create_token():
     mfa_user = get_mfa_user(appengine_user)
     if not mfa_user:
         abort(403)
-    
-    # TODO: encrypt this before storing!!!
+
+    crypter = AES.new(SECRET_KEY, AES.MODE_ECB)
     # TODO: sanitize these inputs!!!
     token = Token(name = request.json['name'],
                   desc = request.json['desc'],
-                  encrypted_private_key = request.json['secret'],
+                  encrypted_private_key = crypter.encrypt(request.json['secret']),
                   owners = [db.Key.from_path('User', appengine_user.user_id())])
     token.put()
     ordered_token = OrderedToken(token = token.key(),
@@ -106,5 +110,6 @@ def get_token_time_value(token_id):
     token = ordered_token.token
     if (mfa_user.key() not in token.owners) and (mfa_user.key() not in token.viewers):
         abort(404)
-    # TODO: calculate the OTP Code and return it
-    return jsonify({'code':token_id})
+    crypter = AES.new(SECRET_KEY, AES.MODE_ECB)
+    totp = TOTP(crypter.decrypt(token.encrypted_private_key))
+    return jsonify({'code':totp.now()})
