@@ -6,8 +6,8 @@ import os.path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'lib'))
 
 # NOTE: You must change this to a random 16 character string
-SECRET_KEY='0000000000000000'
+SECRET_KEY=''
 
-if SECRET_KEY == '0000000000000000' or len(SECRET_KEY) < 16:
-    print "ERROR: Invalid SECRET_KEY. You must specify a complex secret key at least 16 characters long"
+if not SECRET_KEY or not (len(SECRET_KEY) == 16 or len(SECRET_KEY) == 24 or len(SECRET_KEY) == 32):
+    print "ERROR: Invalid SECRET_KEY. You must specify a complex secret key 16|24|32 characters long"
     sys.exit(1)
