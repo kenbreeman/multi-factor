@@ -16,6 +16,8 @@ from pyotp import TOTP
 from Crypto.Cipher import AES 
 from appengine_config import SECRET_KEY
 
+import cgi
+
 
 def get_mfa_user(appengine_user):
     """ Retrieves the User object from the DB """
@@ -79,11 +81,19 @@ def create_token():
     mfa_user = get_mfa_user(appengine_user)
     if not mfa_user:
         abort(403)
+    safe_name = cgi.escape(request.json['name'])
+    if len(safe_name) > 254:
+        abort(400)
+    safe_desc = cgi.escape(request.json['desc'])
+    if len(safe_desc) > 254:
+        abort(400)
+    secret = request.json['secret']
+    if len(secret) != 16:
+        abort(400)
 
     crypter = AES.new(SECRET_KEY, AES.MODE_ECB)
-    # TODO: sanitize these inputs!!!
-    token = Token(name = request.json['name'],
-                  desc = request.json['desc'],
+    token = Token(name = safe_name,
+                  desc = safe_desc,
                   encrypted_private_key = crypter.encrypt(request.json['secret']),
                   owners = [db.Key.from_path('User', appengine_user.user_id())])
     token.put()
