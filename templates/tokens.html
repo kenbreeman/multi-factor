@@ -33,7 +33,7 @@
             <li><a href="{{login_url}}">Login</a></li>
           {% endif %}
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </nav>
 
@@ -51,14 +51,26 @@
     </div>
 
     <script language="javascript">
+      function refreshTOTP() {
+        $("#tokens-table-tbody > tr").each( function() {
+          var id = this.id;
+          $.getJSON( "/api/token/" + id, function ( data ) {
+            $("#"+id+"-totp").html(data.code)
+          });
+        });
+        var seconds = new Date().getSeconds();
+        var millisTillMinute = (60 - seconds) * 1000;
+        setTimeout( refreshTOTP, millisTillMinute);
+      }
       $.getJSON( "/api/tokens", function ( data ) {
         var tokens = data.tokens;
         tokens.sort( function( a, b ) { return a.order - b.order; } );
         var rows = [];
         $.each( tokens, function( key, val ) {
-          rows.push( "<tr id=" + val.id + "><td>" + val.name + "</td><td>" + val.desc + "</td></tr>" );
+          rows.push( "<tr id=" + val.id + "><td>" + val.name + "</td><td>" + val.desc + "</td><td id=" + val.id + "-" + "totp>loading...</td></tr>" );
         });
-        $("#tokens-table-tbody").html(rows.join( "" ))
+        $("#tokens-table-tbody").html(rows.join( "" ));
+        setTimeout(refreshTOTP(), 0);
       });
     </script>
 
