@@ -5,33 +5,55 @@
   <meta charset='utf-8'>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/static/styles.css">
+  <link href="static/bootstrap.min.css" rel="stylesheet">
   <body>
-    <div id="cssmenu">
-      <ol>
-        <li class='active'><a href='/'>About</a></li>
-        {% if username %}
-        <li><a href="/tokens">Tokens</a></li>
-        <li class='last'><a href="{{logout_url}}">Logout</a> [{{username}}]</li>
-        {% else %}
-        <li class='last'><a href="{{login_url}}">Login</a></li>
-        {% endif %}
-      </ol>
-    </div>
-    <div id="main">
-      <p>
-      Multi-factor-authentication combines an identifier (e.g. your email address) with something you know (a password) and something you have (a token).<br>
-      Managing multiple accounts and passwords online is much safer and easier with a password manager, but managing tokens across sites is still hard.<br>
-      Why not use something similar for your tokens?<br>
-      This app allows you to securely store your tokens in a central location.<br>
-      </p>
-      Features include:<br>
-      <ol>
-        <li> Strong multi-factor authentication including hardware token support <a href="http://fidoalliance.org/about">FIDO/U2F</a> </li>
-        <li> Federated login with <a href="https://developers.google.com/+/features/sign-in">Google</a> </li>
-        <li> Token sharing </li>
-        <li> <a href="https://github.com/TODO">Open-source!</a> </li>
-      </ol>
+    <script src="static/jquery-2.1.3.min.js"></script>
+    <script src="static/bootstrap.min.js"></script>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">MFA</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">About</a></li>
+            <li><a href="/tokens">Tokens</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+          {% if username %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> [{{username}}] <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="{{logout_url}}">Logout</a></li>
+              </ul>
+            </li>
+          {% else %}
+            <li><a href="{{login_url}}">Login</a></li>
+          {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="jumbotron">
+        <br>
+
+        Multi-factor-authentication combines an identifier (e.g. your email address) with something you know (a password) and something you have (a token).<br>
+        Managing multiple accounts and passwords online is much safer and easier with a password manager, but managing tokens across sites is still hard.<br>
+        Why not use something similar for your tokens?<br>
+        This app allows you to securely store your tokens in a central location.<br>
+        
+        Features include:<br>
+        <ul>
+          <li> Strong multi-factor authentication including hardware token support <a href="http://fidoalliance.org/about">FIDO/U2F</a> </li>
+          <li> Federated login with <a href="https://developers.google.com/+/features/sign-in">Google</a> </li>
+          <li> Token sharing </li>
+          <li> <a href="https://github.com/TODO">Open-source!</a> </li>
+        </ul>
+      </div>
     </div>
   </body>
 </html>
