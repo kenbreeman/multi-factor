@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Hosted Multi-factor Authentication</title>
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
   </head>
   <meta charset='utf-8'>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,7 +20,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="/">About</a></li>
-            <li class="active"><a href="/tokens">Tokens</a></li>
+            <li><a href="/tokens">Tokens</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
           {% if validuser %}
@@ -30,7 +31,7 @@
               </ul>
             </li>
           {% else %}
-            <li><a href="/signup">Sign Up</a></li>
+            <li class="active"><a href="/signup">Sign Up</a></li>
             <li><a href="{{login_url}}">Login</a></li>
           {% endif %}
           </ul>
@@ -40,40 +41,45 @@
 
     <div class="container">
       <div class="jumbotron">
-        <br><br><br>
-        <table class="table table-striped">
-          <tbody id="tokens-table-tbody">
-            <tr>
-              <td> loading... </td>
-            </tr>
-          </tbody>
-        </table>
+        <br>
+        {% if username %}
+        You have successfully logged in with your Google account!<br>
+        <br>
+        Confirm you wish to create an MFA account:<br>
+        <br>
+        <button id="createaccount" type="button" class="btn btn-default" aria-label="Left Align">
+          <span>Create Account</span>
+        </button>
+
+        <script language="javascript">
+          $('#createaccount').click(function(){
+            $('#createaccount').prop('disabled', true);
+            $('#createaccount').html('Creating...');
+            
+            $.ajax({
+              url: '/api/user',
+              type: 'PUT',
+              timeout: 5000,
+              success: function(result) {
+                window.location.href = '/tokens';
+              },
+              error: function(result, error, foo) {
+                alert('ERROR: Unable to create account. Please try again later.')
+              }
+            });
+
+          });
+        </script>
+
+        {% else %}
+
+        We currently support federated login via Google Accounts:<br>
+        <br>
+        <a href="{{login_url}}"><img src="static/signin.png"></a><br>
+        <br>
+        {% endif %}
+
       </div>
     </div>
-
-    <script language="javascript">
-      function refreshTOTP() {
-        $("#tokens-table-tbody > tr").each( function() {
-          var id = this.id;
-          $.getJSON( "/api/token/" + id, function ( data ) {
-            $("#"+id+"-totp").html(data.code)
-          });
-        });
-        var seconds = new Date().getSeconds();
-        var millisTillMinute = (60 - seconds) * 1000;
-        setTimeout( refreshTOTP, millisTillMinute);
-      }
-      $.getJSON( "/api/tokens", function ( data ) {
-        var tokens = data.tokens;
-        tokens.sort( function( a, b ) { return a.order - b.order; } );
-        var rows = [];
-        $.each( tokens, function( key, val ) {
-          rows.push( "<tr id=" + val.id + "><td>" + val.name + "</td><td>" + val.desc + "</td><td id=" + val.id + "-" + "totp>loading...</td></tr>" );
-        });
-        $("#tokens-table-tbody").html(rows.join( "" ));
-        setTimeout(refreshTOTP(), 0);
-      });
-    </script>
-
   </body>
 </html>

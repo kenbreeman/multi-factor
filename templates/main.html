@@ -22,7 +22,7 @@
             <li><a href="/tokens">Tokens</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-          {% if username %}
+          {% if validuser %}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> [{{username}}] <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -30,10 +30,11 @@
               </ul>
             </li>
           {% else %}
+            <li><a href="/signup">Sign Up</a></li>
             <li><a href="{{login_url}}">Login</a></li>
           {% endif %}
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </nav>
 
@@ -51,7 +52,7 @@
           <li> Strong multi-factor authentication including hardware token support <a href="http://fidoalliance.org/about">FIDO/U2F</a> </li>
           <li> Federated login with <a href="https://developers.google.com/+/features/sign-in">Google</a> </li>
           <li> Token sharing </li>
-          <li> <a href="https://github.com/TODO">Open-source!</a> </li>
+          <li> <a href="https://github.com/kenbreeman/multi-factor">Open-source!</a> </li>
         </ul>
       </div>
     </div>

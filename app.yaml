@@ -11,7 +11,9 @@ handlers:
   script: main.app
 - url: /tokens
   script: main.app
-  login: required
+  secure: always
+- url: /signup
+  script: main.app
   secure: always
 - url: /api/.*
   script: api.app
